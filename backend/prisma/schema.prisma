@@ -14,9 +14,74 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       Int       @id @default(autoincrement())
+  username String    @unique
+  password String
+  role     String
+  // Relations
+  etudiant  Etudiant? // Relation optionnelle avec Etudiant
+  recruteur Recruteur? // Relation optionnelle avec Recruteur
 }
+
+model Etudiant {
+  id            Int        @id @default(autoincrement())
+  userId        Int        @unique
+  user          User       @relation(fields: [userId], references: [id])
+  universiteId  Int
+  universite    Universite @relation(fields: [universiteId], references: [id])
+  nom           String
+  prenom        String
+  dateNaissance DateTime
+  anneeEtude    String
+  skills        String[]   // Liste de compétences
+  favorites     Favori[]   // Offres favorites
+}
+
+model Recruteur {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id])
+  entrepriseId Int?
+  entreprise  Entreprise? @relation(fields: [entrepriseId], references: [id]) // Relation vers Entreprise
+  nom         String
+  prenom      String
+  poste       String
+  listeOffres Offre[]  // Liste des offres créées
+}
+
+model Entreprise {
+  id         Int         @id @default(autoincrement())
+  nom        String
+  recruteurs Recruteur[] // Liste des recruteurs dans l'entreprise
+}
+
+model Offre {
+  id          Int       @id @default(autoincrement())
+  nom         String
+  salaire     Float
+  description String
+  localisation String
+  dateDebut   DateTime
+  rythme      String
+  type        String
+  recruteurId Int
+  recruteur   Recruteur @relation(fields: [recruteurId], references: [id])
+  favoris     Favori[]
+}
+
+model Universite {
+  id        Int         @id @default(autoincrement())
+  nom       String
+  etudiants Etudiant[]  // Liste des étudiants inscrits
+}
+
+model Favori {
+  id         Int      @id @default(autoincrement())
+  etudiantId Int
+  etudiant   Etudiant @relation(fields: [etudiantId], references: [id])
+  offreId    Int
+  offre      Offre    @relation(fields: [offreId], references: [id])
+
+  @@unique([etudiantId, offreId]) // Assure qu'une même offre ne peut pas être ajoutée plusieurs fois aux favoris d'un étudiant
+}
+
