@@ -14,7 +14,7 @@ const authenticateToke = (req, res, next) => {
         if (err) {
             return res.sendStatus(403)
         }
-        req.res = res
+        req.user = user;
         next()
     })
 }

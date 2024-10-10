@@ -4,8 +4,8 @@ const prisma = require('../prisma/prisma');
 //Obtenir tous les offres
 const getAllOffres = async (req, res) => {
     try{
-        const users = await prisma.offre.findMany();
-        res.status(200).json(users);
+        const offres = await prisma.offre.findMany();
+        res.status(200).json(offres);
     }catch(err){
         res.status(500).json({err : "Erreur lors de la recuperation des offres"});
     }

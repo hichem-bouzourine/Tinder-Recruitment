@@ -1,4 +1,5 @@
 const prisma = require('../prisma/prisma');
+const jwt = require('jsonwebtoken');
 
 //Obtenir tous les utilisateurs
 const getAllUsers = async (req, res) => {
@@ -52,6 +53,35 @@ const createUser = async (req, res) => {
           } else {
             res.status(500).json({ err: 'Erreur lors de la création de l\'utilisateur.' });
           }
+    }
+}
+
+//Connexion de l'utilisateur 
+const loginUser = async (req, res) =>{
+
+    const {username, password} = req.body;
+
+    try{
+        const user = await prisma.user.findUnique({
+            where: {username: username},
+        });
+
+        if (!user || user.password !== password) {
+            return res.status(401).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
+        }
+        // Créer un token JWT
+        const token = jwt.sign(
+            {
+            id: user.id, // Inclure l'ID de l'utilisateur dans le payload
+            username: user.username,
+            role: user.role,
+            },
+            process.env.ACCESS_TOKEN_SECRET, // Clé secrète pour signer le token
+        );
+        res.status(200).json({ token });
+    }catch(err){
+        res.status(500).json({err : 'Erreur lors de la connexion'});
+
     }
 }
 
@@ -158,6 +188,7 @@ const updateRecruteur = async (req, res) => {
 module.exports = {
     getAllUsers,
     createUser,
+    loginUser,
     updateUser,
     updateEtudiant, 
     updateRecruteur,
