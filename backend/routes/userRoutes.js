@@ -1,16 +1,13 @@
 const express = require('express');
 
-const {getAllUsers, createUser, loginUser, updateUser, updateEtudiant, updateRecruteur} = require('../controllers/userController');
-const authenticateToken = require('../middleware/auth');
+const { getAllUsers, updateUser, updateEtudiant, updateRecruteur } = require('../controllers/userController');
 
 const router = express.Router();
 
 // Définir les routes pour les utilisateurs
 router.get('/', getAllUsers);
-router.post('/', createUser);
-router.post('/login', loginUser);
-router.put('/me', authenticateToken, updateUser);
-router.put('/etudiant/me', authenticateToken, updateEtudiant);
-router.put('/recruteur/me', authenticateToken, updateRecruteur);
+router.put('/me', updateUser);
+router.put('/etudiant/me', updateEtudiant);
+router.put('/recruteur/me', updateRecruteur);
 
 module.exports = router;
