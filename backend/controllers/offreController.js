@@ -3,22 +3,22 @@ const prisma = require('../prisma/prisma');
 
 //Obtenir tous les offres
 const getAllOffres = async (req, res) => {
-    try{
+    try {
         const offres = await prisma.offre.findMany();
         res.status(200).json(offres);
-    }catch(err){
-        res.status(500).json({err : "Erreur lors de la recuperation des offres"});
+    } catch (err) {
+        res.status(500).json({ err: "Erreur lors de la recuperation des offres" });
     }
 };
 
 //Creer une nouvelle offre
-const createOffre = async(req, res) => {
+const createOffre = async (req, res) => {
     const userId = req.user.id;
 
-    try{
+    try {
         //Verifie que user est un recruteur 
         const recruteur = await prisma.recruteur.findUnique({
-            where: {userId: userId},
+            where: { userId: userId },
         })
         if (!recruteur) {
             return res.status(403).json({ error: 'Accès refusé. Vous devez être un recruteur pour créer une offre.' });
@@ -37,15 +37,39 @@ const createOffre = async(req, res) => {
                 rythme,
                 type,
                 recruteur: { connect: { id: recruteur.id } }, // Lier l'offre au recruteur par son ID
-              },
-        }); 
+            },
+        });
         res.status(201).json(newOffre);
-    }catch(err){
+    } catch (err) {
         res.status(500).json({ error: 'Erreur lors de la création de l\'offre.' });
     }
 }
 
+const getRecruiterOffers = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const recruiter = await prisma.recruteur.findUnique({
+            where: { userId: parseInt(userId) },
+            include: {
+                listeOffres: true,
+            },
+        });
+
+        if (!recruiter) {
+            return res.status(404).json({ error: 'Recruteur non trouvé.' });
+        }
+        res.status(200).json(recruiter.listeOffres);
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({ error: 'Erreur lors de la récupération des offres du recruteur.' });
+    }
+}
+
+
 module.exports = {
     getAllOffres,
     createOffre,
-  };
+    getRecruiterOffers
+};
