@@ -1,23 +1,32 @@
 // src/pages/Offers.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 function Offers() {
   const [offers, setOffers] = useState([]);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState(null); 
+  const navigate = useNavigate();
 
-  // 获取 offers 数据
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/offers'); // 使用后端 API
-        setOffers(response.data); // 将数据保存到状态中
+        const response = await axios.get('http://localhost:3000/api/offers');
+        setOffers(response.data);
       } catch (error) {
         console.error('Error fetching offers:', error);
       }
     };
     fetchOffers();
   }, []);
+
+  
+  const toggleDrawer = (offer) => {
+    setSelectedOffer(offer);
+    setDrawerOpen(!isDrawerOpen);
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -33,13 +42,62 @@ function Offers() {
               <p className="text-gray-600">Type: {offer.type}</p>
               <p className="text-gray-600">Salary: {offer.salaire}</p>
               <p className="text-gray-600">Start Date: {new Date(offer.dateDebut).toLocaleDateString()}</p>
-              <button className="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+              <button
+                onClick={() => toggleDrawer(offer)} 
+                className="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+              >
                 Apply Now
               </button>
             </div>
           ))}
         </div>
       </div>
+
+      {}
+      {selectedOffer && (
+        <div
+          className={`fixed inset-0 z-50 bg-gray-800 bg-opacity-50 transition-opacity ${
+            isDrawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={() => setDrawerOpen(false)} 
+        >
+          <div
+            className={`fixed bg-white p-6 rounded-lg shadow-lg transition-transform transform ${
+              isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+            style={{
+              right: '20px', 
+              top: '100px', 
+              width: '300px',
+            }}
+          >
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Choose an Option</h2>
+            <p className="text-gray-600 mb-4">
+              You are applying for: <strong>{selectedOffer.nom}</strong>
+            </p>
+            <div className="flex flex-col space-y-4">
+              <button
+                onClick={() => {
+                  setDrawerOpen(false);
+                  navigate('/login'); 
+                }}
+                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => {
+                  setDrawerOpen(false);
+                  navigate('/submit', { state: { offer: selectedOffer } }); 
+                }}
+                className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700"
+              >
+                Submit Directly
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Offers from './pages/Offers';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Submit from './pages/Submit';
 // import NotFound from './components/Not-found';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/submit" element={<Submit />} />
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
