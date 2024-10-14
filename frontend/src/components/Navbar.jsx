@@ -11,7 +11,7 @@ function Navbar() {
                 </div>
                 <div className="hidden md:flex space-x-8">
                     <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
-                    <Link to="/offers" className="text-gray-600 hover:text-blue-600">Trouver une alternance</Link>
+                    <Link to="/offers" className="text-gray-600 hover:text-blue-600">Find an alternation</Link>
                     <Link to="/community" className="text-gray-600 hover:text-blue-600">Community</Link>
                 </div>
                 <div className="flex space-x-4">
