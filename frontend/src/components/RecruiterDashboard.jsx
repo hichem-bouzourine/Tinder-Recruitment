@@ -5,7 +5,7 @@ const RecruiterDashboard = () => {
     const [offers, setOffers] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3000/api/offers/recruiter/2')
+        axios.get('http://localhost:3000/api/offers/recruiter/29')
             .then(response => {
                 setOffers(response.data);
             })
