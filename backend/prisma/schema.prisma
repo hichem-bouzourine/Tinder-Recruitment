@@ -24,10 +24,11 @@ model Etudiant {
   prenom        String
   dateNaissance DateTime
   anneeEtude    String
-  skills        String[]
   universite    Universite @relation(fields: [universiteId], references: [id])
   user          User       @relation(fields: [userId], references: [id])
   favorites     Favori[]
+  candidatures Candidature[]
+  competences Competence[]
 }
 
 model Recruteur {
@@ -60,6 +61,7 @@ model Offre {
   recruteurId  Int
   favoris      Favori[]
   recruteur    Recruteur @relation(fields: [recruteurId], references: [id])
+  candidatures Candidature[]
 }
 
 model Universite {
@@ -76,4 +78,21 @@ model Favori {
   offre      Offre    @relation(fields: [offreId], references: [id])
 
   @@unique([etudiantId, offreId])
+}
+
+model Competence {
+  id         Int      @id @default(autoincrement())
+  nom        String 
+  etudiants  Etudiant[]
+}
+
+model Candidature {
+  id         Int      @id @default(autoincrement())
+  etudiantId Int
+  offreId    Int
+  etat       String 
+  etudiant   Etudiant @relation(fields: [etudiantId], references: [id])
+  offre      Offre    @relation(fields: [offreId], references: [id])
+
+  @@unique([etudiantId, offreId]) // Un étudiant ne peut postuler qu'une seule fois à une offre donnée
 }

@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Ajouter les universités
-  const universites = await prisma.universite.createMany({
+  await prisma.universite.createMany({
     data: [
       { nom: 'Université Paris-Sorbonne' },
       { nom: 'Université de Lyon' },
@@ -14,7 +14,7 @@ async function main() {
   });
 
   // Ajouter les entreprises
-  const entreprises = await prisma.entreprise.createMany({
+  await prisma.entreprise.createMany({
     data: [
       { nom: 'Capgemini' },
       { nom: 'Google France' },
@@ -24,7 +24,22 @@ async function main() {
     ],
   });
 
-  console.log('Universités et entreprises ont été ajoutées avec succès !');
+  await prisma.competence.createMany({
+    data: [
+      { nom: 'Analyse financière' },
+      { nom: 'Comptabilité' },
+      { nom: 'Gestion des risques' },
+      { nom: 'Modélisation financière' },
+      { nom: 'Évaluation d\'actifs' },
+      { nom: 'Analyse des investissements' },
+      { nom: 'Gestion de trésorerie' },
+      { nom: 'Marchés financiers' },
+      { nom: 'Budget et contrôle de gestion' },
+      { nom: 'Planification fiscale' },
+    ],
+  });
+
+  console.log('Universités, entreprises et compétences ont été ajoutées avec succès !');
 }
 
 main()
