@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 
-const RecruiterDashboard = () => {
+const RecruiterDashboard = ({ user }) => {
     const [offers, setOffers] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:3000/api/offers/recruiter/29')
+        axios.get(`http://localhost:3000/api/offers/recruiter/${user.id}`)
             .then(response => {
                 setOffers(response.data);
             })

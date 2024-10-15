@@ -13,76 +13,109 @@ const getAllUsers = async (req, res) => {
 
 //Creer un nouvel utilisateur
 const createUser = async (req, res) => {
-    const { username, password, role } = req.body;
+    const { email, password, role } = req.body;
     try {
         const newUser = await prisma.user.create({
             data: {
-                username, password, role
+                email,
+                password,
+                role
             },
         });
 
-        if (role === 'etudiant') {
+        if (role === 'STUDENT') {
+            const { universiteId, nom, prenom, dateNaissance, anneeEtude, competences } = req.body;
+
+            if (!universiteId) {
+                return res.status(400).json({ error: 'University ID is required for students.' });
+            }
+
             // Créer un étudiant lié à l'utilisateur
-            await prisma.etudiant.create({
+            const newEtudiant = await prisma.etudiant.create({
                 data: {
-                    userId: newUser.id,
-                    nom: '', //vide pour l'instant
-                    prenom: '',
-                    dateNaissance: new Date(),
-                    anneeEtude: '',
-                    skills: [],
-                    favorites: [], // Liste vide par défaut
+                    nom: nom || '',
+                    prenom: prenom || '',
+                    dateNaissance: dateNaissance ? new Date(dateNaissance) : null,
+                    anneeEtude: anneeEtude || null,
+                    universite: {
+                        connect: { id: universiteId }
+                    },
+                    user: {
+                        connect: { id: newUser.id } // Use relation to connect the user
+                    }
                 },
             });
-        } else if (role === 'recruteur') {
+
+            // Connect competences through EtudiantCompetence join table
+            if (competences && competences.length > 0) {
+                await prisma.etudiantCompetence.createMany({
+                    data: competences.map((competence) => ({
+                        etudiantId: newEtudiant.id,
+                        competenceId: competence.id
+                    })),
+                });
+            }
+
+        } else if (role === 'RECRUITER') {
+            const { entrepriseId, nom, prenom, poste } = req.body;
+
             // Créer un recruteur lié à l'utilisateur
-            additionalData = await prisma.recruteur.create({
+            await prisma.recruteur.create({
                 data: {
-                    userId: newUser.id,
-                    nom: '',
-                    prenom: '',
-                    poste: '',
-                    listeOffres: [],
+                    nom: nom,
+                    prenom: prenom,
+                    poste: poste,
+                    entreprise: entrepriseId && {
+                        connect: { id: entrepriseId }
+                    },
+                    user: {
+                        connect: { id: newUser.id } // Use relation to connect the user
+                    }
                 },
             });
         }
         res.status(201).json(newUser);
     } catch (err) {
+        console.log(err);
         if (err.code === 'P2002' && err.meta.target.includes('username')) {
             res.status(400).json({ error: 'Le nom d\'utilisateur est déjà pris, veuillez en choisir un autre.' });
         } else {
             res.status(500).json({ err: 'Erreur lors de la création de l\'utilisateur.' });
         }
     }
-}
+};
+
+
 
 //Connexion de l'utilisateur 
 const loginUser = async (req, res) => {
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await prisma.user.findUnique({
-            where: { username: username },
+            where: { email: email },
         });
 
         if (!user || user.password !== password) {
             return res.status(401).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
         }
         // Créer un token JWT
-        const token = jwt.sign(
-            {
-                id: user.id, // Inclure l'ID de l'utilisateur dans le payload
-                username: user.username,
-                role: user.role,
-            },
-            process.env.JWT_SECRET, // Clé secrète pour signer le token
-            {
-                expiresIn: '1h', // Expirer le token après 24 heures
-            }
-        );
-        res.status(200).json({ token });
+        // const token = jwt.sign(
+        //     {
+        //         id: user.id, // Inclure l'ID de l'utilisateur dans le payload
+        //         username: user.username,
+        //         role: user.role,
+        //     },
+        //     process.env.JWT_SECRET, // Clé secrète pour signer le token
+        //     {
+        //         expiresIn: '1h', // Expirer le token après 24 heures
+        //     }
+        // );
+        res.status(200).json(user);
     } catch (err) {
+        console.log(err);
+
         res.status(500).json({ err: 'Erreur lors de la connexion' });
 
     }

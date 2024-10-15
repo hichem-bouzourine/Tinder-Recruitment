@@ -36,13 +36,13 @@ model User {
 model Etudiant {
   id            Int        @id @default(autoincrement())
   userId        Int        @unique
-  universiteId  Int
+  universiteId  Int?
   nom           String
   prenom        String
   dateNaissance DateTime
-  anneeEtude    String
-  universite    Universite @relation(fields: [universiteId], references: [id])
-  user          User       @relation(fields: [userId], references: [id])
+  anneeEtude    String?
+  universite    Universite? @relation(fields: [universiteId], references: [id])
+  user          User?       @relation(fields: [userId], references: [id])
   favorites     Favori[]
   candidatures  Candidature[]
   competences   EtudiantCompetence[]
