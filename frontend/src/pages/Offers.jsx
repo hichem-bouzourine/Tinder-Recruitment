@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import TinderCard from 'react-tinder-card';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import { useSpring, animated } from 'react-spring';
-import { useDrag } from 'react-use-gesture';
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
-function Offers() {
+function Simple() {
   const [offers, setOffers] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0); 
-  const navigate = useNavigate();
-  const [message, setMessage] = useState(''); 
+  const [lastDirection, setLastDirection] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchOffers = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/offers');
@@ -20,106 +18,73 @@ function Offers() {
         console.error('Error fetching offers:', error);
       }
     };
+
     fetchOffers();
   }, []);
 
-
-  const currentOffer = offers[currentIndex];
-
-
-  const [props, set] = useSpring(() => ({ x: 0, scale: 1 }));
-
-  const bind = useDrag(({ down, movement: [mx], cancel, direction: [xDir] }) => {
-    if (!down && Math.abs(mx) > 200) {
-      if (xDir > 0) {
-        // -> Apply
-        setMessage(`Successfully applied to ${currentOffer?.nom}`);
-        setTimeout(() => {
-          setMessage('');
-          setCurrentIndex((prev) => (prev + 1) % offers.length);
-        }, 1000);
-      } else {
-        setCurrentIndex((prev) => (prev + 1) % offers.length); 
-      }
-      cancel(); 
+  const swiped = (direction, offerToDelete) => {
+    setLastDirection(direction);
+    
+    if (direction === 'left') {
+      toast.error(`You declined the job: ${offerToDelete.nom}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else if (direction === 'right') {
+      toast.success(`You applied for the job: ${offerToDelete.nom}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
-    set({
-      x: down ? mx : 0,
-      scale: down ? 1.1 : 1,
-    });
-  });
+  };
 
-  if (!currentOffer) {
-    return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-        <h1 className="text-3xl font-bold text-gray-900">No more offers available</h1>
-      </div>
-    );
-  }
+  const outOfFrame = (nom) => {
+    console.log(nom + ' left the screen!');
+  };
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center relative">
+    <div className="bg-offre-background h-screen relative">
       <Navbar />
+      <h1 className="text-center text-4xl font-bold mt-10">Available Offers</h1>
 
-      <h1>Test - Offers Page Loaded</h1>
+      <div className="cardContainer flex justify-center items-center h-full">
+        {offers.length > 0 ? (
+          offers.map((offer) => (
+            <TinderCard
+              className="swipe"
+              key={offer.id}
+              onSwipe={(dir) => swiped(dir, offer)}
+              onCardLeftScreen={() => outOfFrame(offer.nom)}
+            >
+              <div className="card">
+                <div className="cardContent">
+                  <h2>{offer.nom}</h2>
+                  <p><strong>Location:</strong> {offer.localisation}</p>
+                  <p><strong>Salary:</strong> {offer.salaire} €</p>
+                  <p><strong>Start Date:</strong> {new Date(offer.dateDebut).toLocaleDateString()}</p>
+                  <p><strong>Description:</strong> {offer.description}</p>
+                </div>
+              </div>
+            </TinderCard>
+          ))
+        ) : (
+          <p>Loading offers...</p>
+        )}
+      </div>
 
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Available Internship Offers</h1>
-
-      {message && (
-        <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow-lg">
-          {message}
-        </div>
-      )}
-
-      {/* card offre*/}
-      <animated.div
-        {...bind()}
-        style={{
-          ...props,
-          touchAction: 'none',
-          backgroundColor: 'white',
-          width: '300px',
-          height: '400px',
-          padding: '20px',
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-          borderRadius: '10px',
-          position: 'relative',
-        }}
-        className="flex flex-col justify-between"
-      >
-        {/* Decline Bouton */}
-        <button
-          onClick={() => setCurrentIndex((prev) => (prev + 1) % offers.length)}
-          className="absolute top-2 left-2 bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Decline
-        </button>
-
-        {/* Offre info */}
-        <div>
-          <h2 className="text-2xl font-bold text-blue-600">{currentOffer.nom}</h2>
-          <p className="text-gray-600 mt-2">Location: {currentOffer.localisation}</p>
-          <p className="text-gray-600">Type: {currentOffer.type}</p>
-          <p className="text-gray-600">Salary: {currentOffer.salaire}</p>
-          <p className="text-gray-600">Start Date: {new Date(currentOffer.dateDebut).toLocaleDateString()}</p>
-        </div>
-
-        {/* Apply Bouton */}
-        <button
-          onClick={() => {
-            setMessage(`Successfully applied to ${currentOffer.nom}`);
-            setTimeout(() => {
-              setMessage('');
-              setCurrentIndex((prev) => (prev + 1) % offers.length);
-            }, 1000);
-          }}
-          className="absolute top-2 right-2 bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Apply
-        </button>
-      </animated.div>
+      <ToastContainer /> {}
     </div>
   );
 }
 
-export default Offers;
+export default Simple;
