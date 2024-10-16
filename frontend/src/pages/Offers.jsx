@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TinderCard from 'react-tinder-card';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Simple() {
   const [offers, setOffers] = useState([]);
@@ -24,7 +24,7 @@ function Simple() {
 
   const swiped = (direction, offerToDelete) => {
     setLastDirection(direction);
-    
+
     if (direction === 'left') {
       toast.error(`You declined the job: ${offerToDelete.nom}`, {
         position: "top-center",
@@ -55,9 +55,9 @@ function Simple() {
   return (
     <div className="bg-offre-background h-screen relative">
       <Navbar />
-      <h1 className="text-center text-4xl font-bold mt-10">Available Offers</h1>
+      <h1 className="text-center text-6xl font-bold mt-10">Available Offers</h1>
 
-      <div className="cardContainer flex justify-center items-center h-full">
+      <div className="cardContainer">
         {offers.length > 0 ? (
           offers.map((offer) => (
             <TinderCard
@@ -82,7 +82,7 @@ function Simple() {
         )}
       </div>
 
-      <ToastContainer /> {}
+      <ToastContainer />
     </div>
   );
 }

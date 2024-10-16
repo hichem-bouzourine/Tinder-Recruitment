@@ -20,16 +20,16 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; 
+  height: 100vh;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 6rem; 
   color: #333;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
 }
-
 h2, h3 {
   font-size: 1.8em;
   color: #555;
@@ -78,7 +78,7 @@ input {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 200px); 
 }
 
 .card {
@@ -91,6 +91,7 @@ input {
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin-top: -50px;
 }
 
 .card:hover {
