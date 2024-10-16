@@ -1,7 +1,17 @@
 // src/components/Navbar.js
 import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
 function Navbar() {
+    const [user, setUser] = React.useState(localStorage.getItem('user'));
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            setUser(user);
+        }
+    }, []);
+
     return (
         <nav className="bg-white border-b border-blue-200">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -14,10 +24,12 @@ function Navbar() {
                     <Link to="/offers" className="text-gray-600 hover:text-blue-600">Find an alternation</Link>
                     <Link to="/community" className="text-gray-600 hover:text-blue-600">Community</Link>
                 </div>
-                <div className="flex space-x-4">
-                    <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:underline">Login</Link>
-                    <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Register Now</Link>
-                </div>
+                {!user &&
+                    <div className="flex space-x-4">
+                        <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:underline">Login</Link>
+                        <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Register Now</Link>
+                    </div>
+                }
             </div>
         </nav>
     );

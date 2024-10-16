@@ -1,7 +1,6 @@
 import React from 'react';
 
 const StudentDashboard = () => {
-    console.log('Student Dashboard');
 
     return (
         <div>
