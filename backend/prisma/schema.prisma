@@ -72,8 +72,6 @@ model Offre {
   salaire      Float
   description  String
   localisation String
-  dateDebut    DateTime
-  rythme       Rythme
   type         String
   recruteurId  Int
   favoris      Favori[]
