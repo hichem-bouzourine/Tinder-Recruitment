@@ -28,13 +28,16 @@ function StudentProfile() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const api = `http://localhost:3000/api/users/etudiant/me/${user.id}`;
+        console.log(cv);
         axios.put(api, {
             nom: lastName,
             prenom: firstName,
             dateNaissance: birthday,
             anneeEtude: anneeEtude,
             competences: selectedSkills,
-            universiteNom: selectedUnivs
+            universiteNom: selectedUnivs,
+            cv: cv,
+            linkToVideo: linkToVideo
         }).catch(error => console.log(error));
         window.location.reload();
     }
@@ -57,6 +60,8 @@ function StudentProfile() {
                     value: response.data.universite.id,
                     label: response.data.universite.nom
                 });
+                setCv(response.data.cv);
+                setLinkToVideo(response.data.linkToVideo);
             }
             )
             .catch(error => console.log(error));

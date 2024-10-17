@@ -24,6 +24,8 @@ model Etudiant {
   prenom        String
   dateNaissance DateTime
   anneeEtude    String?
+  cv            String?
+  linkToVideo   String?
   candidatures  Candidature[]
   universite    Universite?          @relation(fields: [universiteId], references: [id])
   user          User                 @relation(fields: [userId], references: [id])

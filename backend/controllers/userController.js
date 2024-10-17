@@ -179,8 +179,9 @@ const getEtudiant = async (req, res) => {
 // Mettre à jour les informations d'un étudiant
 const updateEtudiant = async (req, res) => {
     const userId = parseInt(req.params.id);
-    const { nom, prenom, dateNaissance, anneeEtude, competences, universiteNom } = req.body;
+    const { nom, prenom, dateNaissance, anneeEtude, competences, universiteNom, cv, linkToVideo } = req.body;
     try {
+        console.log(req.body);
         const updatedEtudiant = await prisma.etudiant.update({
             where: { userId: userId },
             data: {
@@ -188,6 +189,8 @@ const updateEtudiant = async (req, res) => {
                 prenom: prenom,
                 dateNaissance: new Date(dateNaissance),
                 anneeEtude: anneeEtude,
+                cv: cv,
+                linkToVideo: linkToVideo,
                 universite: { connect: { id: universiteNom.value } },
             },
         });
