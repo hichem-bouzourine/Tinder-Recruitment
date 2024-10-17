@@ -12,15 +12,16 @@ function StudentProfile() {
     // const [password, setPassword] = useState("");
     // const [confirmPassword, setConfirmPassword] = useState("");
     const [birthday, setBirthday] = useState(null);
-
     const [anneeEtude, setAnneeEtude] = useState(null);
     const [competences, setCompetences] = useState([]); // Array of skills
     const [selectedSkills, setSelectedSkills] = useState([]); // To store selected skills
-
     const [univs, setUnivs] = useState([]); // Array of skills
     const [selectedUnivs, setSelectedUnivs] = useState([]); // To store selected skills
     const [cv, setCv] = useState('');
+    const [file, setFile] = useState(null);
     const [linkToVideo, setLinkToVideo] = useState('');
+
+    const fileDownloadAPI = 'http://localhost:3000/api/users/etudiant/cv/'
 
     const storedUser = localStorage.getItem('user');
     const user = JSON.parse(storedUser);
@@ -28,7 +29,6 @@ function StudentProfile() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const api = `http://localhost:3000/api/users/etudiant/me/${user.id}`;
-        console.log(cv);
         axios.put(api, {
             nom: lastName,
             prenom: firstName,
@@ -38,9 +38,29 @@ function StudentProfile() {
             universiteNom: selectedUnivs,
             cv: cv,
             linkToVideo: linkToVideo
-        }).catch(error => console.log(error));
-        window.location.reload();
+        })
+            .catch(error => console.log(error))
+            .finally(() => {
+                window.location.reload();
+            });
     }
+    const handleUpload = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', file);
+        axios.post(`http://localhost:3000/api/users/etudiant/upload/${user.id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            setCv(file.name);
+        })
+    }
+
 
     // Fetch the user data from the API
     useEffect(() => {
@@ -94,7 +114,7 @@ function StudentProfile() {
 
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-            <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-lg mx-auto my-8">
+            <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-2xl mx-auto my-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Profile</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -121,17 +141,55 @@ function StudentProfile() {
                             />
                         </div>
                     </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <label htmlFor="cv" className="block text-gray-700 text-sm font-semibold mb-2">CV</label>
+                        {cv ? (
+                            <div className="space-y-3">
+                                <div className="flex items-center space-x-2">
+                                    <a href={fileDownloadAPI + user.id} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 font-medium">
+                                        View Current CV
+                                    </a>
+                                    <span className="text-sm text-gray-500">({cv})</span>
+                                </div>
+                                <p className="text-sm text-gray-600">Upload or Replace CV:</p>
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-600 mb-2">No CV uploaded yet. Upload your CV:</p>
+                        )}
+                        <div className="flex items-center space-x-3 mt-2">
+                            <input
+                                type="file"
+                                id="cv"
+                                onChange={(e) => {
+                                    setFile(e.target.files[0]);;
+                                }}
+                                name="cv"
+                                className="flex-grow p-2 border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                            />
+                            {file && (
+                                <button
+                                    onClick={handleUpload}
+                                    type="button"
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                                >
+                                    {cv ? 'Update' : 'Upload'}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label htmlFor="cv" className="block text-gray-700 text-sm font-semibold mb-2">CV</label>
-                            <input
-                                type="text"
-                                id="cv"
-                                onChange={(e) => setCv(e.target.value)}
-                                name="cv"
-                                value={cv}
-                                placeholder="e.g., example.pdf"
+                            <label htmlFor="birthday" className="block text-gray-700 text-sm font-semibold mb-2">Birthday</label>
+                            <DatePicker
+                                id="birthday"
+                                selected={birthday}
+                                onChange={(date) => setBirthday(date)}
                                 className="mt-1 p-2 w-full border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                                dateFormat="yyyy/MM/dd"
+                                placeholderText="Select a date"
+                                required
                             />
                         </div>
                         <div>
@@ -147,17 +205,7 @@ function StudentProfile() {
                             />
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2">Birthday</label>
-                        <DatePicker
-                            selected={birthday}
-                            onChange={(date) => setBirthday(date)}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-                            dateFormat="yyyy/MM/dd"
-                            placeholderText="Select a date"
-                            required
-                        />
-                    </div>
+
                     <div>
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Universities</label>
                         <Select
@@ -177,6 +225,7 @@ function StudentProfile() {
                             })}
                         />
                     </div>
+
                     <div>
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Select Skills</label>
                         <Select
@@ -196,6 +245,7 @@ function StudentProfile() {
                             })}
                         />
                     </div>
+
                     <button
                         type="submit"
                         className="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out font-semibold"

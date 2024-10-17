@@ -2,6 +2,11 @@ const { parse } = require('dotenv');
 const prisma = require('../prisma/prisma');
 const jwt = require('jsonwebtoken');
 
+const fs = require('fs');
+const path = require('path');
+
+
+
 //Obtenir tous les utilisateurs
 const getAllUsers = async (req, res) => {
     try {
@@ -179,7 +184,7 @@ const getEtudiant = async (req, res) => {
 // Mettre à jour les informations d'un étudiant
 const updateEtudiant = async (req, res) => {
     const userId = parseInt(req.params.id);
-    const { nom, prenom, dateNaissance, anneeEtude, competences, universiteNom, cv, linkToVideo } = req.body;
+    const { nom, prenom, dateNaissance, anneeEtude, competences, universiteNom, linkToVideo } = req.body;
     try {
         console.log(req.body);
         const updatedEtudiant = await prisma.etudiant.update({
@@ -189,7 +194,6 @@ const updateEtudiant = async (req, res) => {
                 prenom: prenom,
                 dateNaissance: new Date(dateNaissance),
                 anneeEtude: anneeEtude,
-                cv: cv,
                 linkToVideo: linkToVideo,
                 universite: { connect: { id: universiteNom.value } },
             },
@@ -269,6 +273,53 @@ const updateRecruteur = async (req, res) => {
     }
 };
 
+const uploadCV = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    const userId = parseInt(req.params.id);
+    try {
+        const userUploadDir = path.join(__dirname, '../uploads', userId.toString());
+        if (!fs.existsSync(userUploadDir)) {
+            fs.mkdirSync(userUploadDir, { recursive: true });
+        }
+        const fileName = req.file.originalname;
+        const oldPath = req.file.path;
+        const newPath = path.join(userUploadDir, fileName);
+        fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+                return res.status(500).send('Error saving file.');
+            }
+        });
+        const updatedEtudiant = await prisma.etudiant.update({
+            where: { userId: userId },
+            data: {
+                cv: fileName,
+            },
+        });
+        res.status(200).json(updatedEtudiant);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la mise à jour du CV.' });
+    }
+}
+
+const getCV = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    try {
+        const etudiant = await prisma.etudiant.findUnique({
+            where: { userId: userId },
+        });
+        if (!etudiant) {
+            return res.status(404).json({ error: 'Étudiant non trouvé.' });
+        }
+        res.download(path.join(__dirname, '../uploads', userId.toString(), etudiant.cv));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération du CV.' });
+    }
+}
+
 
 
 module.exports = {
@@ -279,6 +330,8 @@ module.exports = {
     updateEtudiant,
     updateRecruteur,
     getEtudiant,
-    getRecruiter
+    getRecruiter,
+    uploadCV,
+    getCV
 };
 
