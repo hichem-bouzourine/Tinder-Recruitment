@@ -11,39 +11,43 @@ const getAllOffres = async (req, res) => {
     }
 };
 
-//Creer une nouvelle offre
+// Créer une nouvelle offre
 const createOffre = async (req, res) => {
-    const userId = req.user.id;
+
+    const userId = req.body.userId;
+    
 
     try {
-        //Verifie que user est un recruteur 
+        // Vérifier que l'utilisateur est un recruteur
         const recruteur = await prisma.recruteur.findUnique({
-            where: { userId: userId },
-        })
+            where: { userId: parseInt(userId) },
+        });
+
         if (!recruteur) {
             return res.status(403).json({ error: 'Accès refusé. Vous devez être un recruteur pour créer une offre.' });
         }
 
-        //Creer l'offre
-        const { nom, salaire, description, localisation, dateDebut, rythme, type } = req.body;
-
+        // Créer l'offre
+        const { nom, salaire, description, localisation, rythme, type } = req.body;
+        console.log(recruteur);
+        const salaireFloat = parseFloat(salaire);
         const newOffre = await prisma.offre.create({
             data: {
                 nom,
-                salaire,
+                salaire: salaireFloat,
                 description,
                 localisation,
-                dateDebut: new Date(dateDebut),
-                rythme,
                 type,
                 recruteur: { connect: { id: recruteur.id } }, // Lier l'offre au recruteur par son ID
             },
         });
+        console.log(newOffre);
         res.status(201).json(newOffre);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ error: 'Erreur lors de la création de l\'offre.' });
     }
-}
+};
 
 const getRecruiterOffers = async (req, res) => {
     const userId = req.params.id;
