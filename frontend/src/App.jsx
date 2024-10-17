@@ -6,6 +6,7 @@ import Offers from './pages/Offers';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Submit from './pages/Submit';
+import Settings from './pages/Settings';
 // import NotFound from './components/Not-found';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/submit" element={<Submit />} />
+        <Route path="/settings" element={<Settings />} />
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
