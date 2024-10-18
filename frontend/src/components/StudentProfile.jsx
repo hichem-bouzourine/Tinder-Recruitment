@@ -12,7 +12,7 @@ function StudentProfile() {
     // const [password, setPassword] = useState("");
     // const [confirmPassword, setConfirmPassword] = useState("");
     const [birthday, setBirthday] = useState(null);
-    const [anneeEtude, setAnneeEtude] = useState(null);
+    const [anneeEtude, setAnneeEtude] = useState('');
     const [competences, setCompetences] = useState([]); // Array of skills
     const [selectedSkills, setSelectedSkills] = useState([]); // To store selected skills
     const [univs, setUnivs] = useState([]); // Array of skills
@@ -70,7 +70,7 @@ function StudentProfile() {
                 setFirstName(response.data.prenom);
                 setLastName(response.data.nom);
                 // setEmail(response.data.user.email);
-                setAnneeEtude(response.data.anneeEtude);
+                response.data.anneeEtude ? setAnneeEtude(response.data.anneeEtude) : setAnneeEtude('');
                 setBirthday(response.data.dateNaissance);
                 setSelectedSkills(response.data.competences.map(skill => ({
                     value: skill.id,
@@ -80,8 +80,8 @@ function StudentProfile() {
                     value: response.data.universite.id,
                     label: response.data.universite.nom
                 });
-                setCv(response.data.cv);
-                setLinkToVideo(response.data.linkToVideo);
+                response.data.cv ? setCv(response.data.cv) : setCv('');
+                response.data.linkToVideo ? setLinkToVideo(response.data.linkToVideo) : setLinkToVideo('');
             }
             )
             .catch(error => console.log(error));
