@@ -67,8 +67,8 @@ function StudentProfile() {
         const api = `http://localhost:3000/api/users/etudiant/${user.id}`;
         axios.get(api)
             .then(response => {
-                setFirstName(response.data.nom);
-                setLastName(response.data.prenom);
+                setFirstName(response.data.prenom);
+                setLastName(response.data.nom);
                 // setEmail(response.data.user.email);
                 setAnneeEtude(response.data.anneeEtude);
                 setBirthday(response.data.dateNaissance);
