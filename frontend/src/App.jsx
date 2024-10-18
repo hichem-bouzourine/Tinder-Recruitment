@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Submit from './pages/Submit';
 import Settings from './pages/Settings';
+import PostsOuverts from './pages/PostsOuverts';
 // import NotFound from './components/Not-found';
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/submit" element={<Submit />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/postsOuverts" element={<PostsOuverts />} />
+
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>

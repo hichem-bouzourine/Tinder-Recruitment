@@ -25,7 +25,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/posts" className="flex items-center text-gray-800 hover:text-blue-500">
+                    <Link to="/postsOuverts" className="flex items-center text-gray-800 hover:text-blue-500">
                         <FiFileText className="mr-3" /> Posts Ouverts
                     </Link>
                 </li>
