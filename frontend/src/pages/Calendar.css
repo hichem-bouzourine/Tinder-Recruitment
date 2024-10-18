@@ -1,0 +1,47 @@
+/* src/components/Calendar.css */
+
+.calendar-wrapper {
+    padding: 15px;
+    margin: 10em auto;
+    max-width: 1080px;
+  }
+  
+  h1 {
+    font-size: 2em;
+    text-align: center;
+  }
+  
+  .calendar-table {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .day-column {
+    flex: 1;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ebebeb;
+  }
+  
+  .heading {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .entry {
+    margin: 10px 0;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
