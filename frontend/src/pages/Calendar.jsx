@@ -1,6 +1,8 @@
-// src/components/Calendar.jsx
+// src/pages/Calendar.jsx
 import React, { useState } from 'react';
-import './Calendar.css'; // Réutilise ton fichier CSS
+import './Calendar.css'; // Ajout des styles améliorés
+
+const HOURS = Array.from({ length: 9 }, (_, i) => i + 9); // Créneaux horaires de 9h à 17h
 
 const Calendar = () => {
     const [days, setDays] = useState([
@@ -32,9 +34,9 @@ const Calendar = () => {
 
     return (
         <div className="calendar-wrapper">
-            <h1>Calendar</h1>
+            <h1>Weekly Calendar</h1>
             {/* Formulaire pour ajouter des rendez-vous */}
-            <form onSubmit={handleAddAppointment}>
+            <form className="appointment-form" onSubmit={handleAddAppointment}>
                 <label>
                     Title:
                     <input
@@ -67,15 +69,32 @@ const Calendar = () => {
                 <button type="submit">Add Appointment</button>
             </form>
 
-            {/* Calendrier affichant les rendez-vous */}
+            {/* Affichage du calendrier */}
             <div className="calendar-table">
+                <div className="hours-column">
+                    {HOURS.map((hour) => (
+                        <div key={hour} className="hour-cell">
+                            {hour}:00
+                        </div>
+                    ))}
+                </div>
                 {days.map((day) => (
                     <div className="day-column" key={day.name}>
                         <div className="heading">{day.name}</div>
-                        {day.appointments.map((appointment, index) => (
-                            <div key={index} className="entry">
-                                <h3>{appointment.title}</h3>
-                                <p>{appointment.time}</p>
+                        {HOURS.map((hour) => (
+                            <div key={hour} className="hour-cell">
+                                {day.appointments.map((appointment, index) => {
+                                    const appointmentHour = parseInt(appointment.time.split(':')[0]);
+                                    if (appointmentHour === hour) {
+                                        return (
+                                            <div key={index} className="appointment-entry">
+                                                <h3>{appointment.title}</h3>
+                                                <p>{appointment.time}</p>
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </div>
                         ))}
                     </div>
