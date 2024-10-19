@@ -175,11 +175,11 @@ input {
 }
 
 .content-right {
-  background-image: url('/src/assets/bg_offre.jpg');  /* 使用您实际的图片路径 */
+  background-image: url('/src/assets/bg_offre.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; /* 设置高度 */
-  padding: 20px; /* 为内容设置一定的间距 */
-  flex-grow: 1; /* 确保内容区域可以扩展 */
+  height: 100vh; 
+  padding: 20px;
+  flex-grow: 1;
 }

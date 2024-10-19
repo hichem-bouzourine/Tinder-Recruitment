@@ -8,7 +8,7 @@ import Sidebar from '../components/Sidebar';
 function Simple() {
   const [offers, setOffers] = useState([]);
   const [lastDirection, setLastDirection] = useState(null);
-  const [userRole, setUserRole] = useState(null); // 用于存储用户角色
+  const [userRole, setUserRole] = useState(null); 
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -22,11 +22,11 @@ function Simple() {
 
     fetchOffers();
 
-    // 获取用户角色
+    // Get User
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setUserRole(parsedUser.role); // 将用户角色存储到状态中
+      setUserRole(parsedUser.role); 
     }
   }, []);
 
@@ -60,19 +60,18 @@ function Simple() {
     console.log(nom + ' left the screen!');
   };
 
-  // 确保 `userRole` 被正确获取后再渲染
   if (userRole === null) {
     return <p>Loading...</p>;
   }
 
-  // 如果用户角色是 STUDENT，则显示学生页面
+  // User ÉTUDIANT
   if (userRole === 'STUDENT') {
     return (
       <div className="flex">
-        {/* 左侧导航栏 */}
+        {/* Navbar vertical à gauche*/}
         <Sidebar />
 
-        {/* 右侧内容 */}
+        {/* Le contenu à droit*/}
         <div className="bg-offre-background h-screen relative flex-1">
           <h1 className="text-center text-6xl font-bold mt-10">Available Offers</h1>
 
@@ -107,7 +106,7 @@ function Simple() {
     );
   }
 
-  // 如果用户角色是 RECRUITER，则显示招聘者页面
+  // User RECRUITER
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <Sidebar />
