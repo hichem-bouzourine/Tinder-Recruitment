@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votre candidature a été acceptée</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #007bff;
+      padding: 20px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .content h2 {
+      color: #333333;
+      font-size: 20px;
+    }
+
+    .content p {
+      color: #666666;
+      line-height: 1.6;
+    }
+
+    .cta {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #4f9aeb;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+      color: inherit;
+    }
+
+    .footer {
+      text-align: center;
+      color: #999999;
+      padding: 20px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Félicitations, ${etudiantName} !</h1>
+    </div>
+    <div class="content">
+      <h2>Votre candidature a été acceptée !</h2>
+      <p>Nous avons le plaisir de vous informer que votre candidature pour l'offre <strong>${offreNom}</strong> a été <strong>acceptée</strong>.</p>
+      <p>Nous vous remercions pour l'intérêt que vous portez à notre entreprise, et nous sommes impatients de vous accueillir au sein de notre équipe.</p>
+      {{comment}}
+      <a href="http://localhost:5173/" class="cta">En savoir plus</a>
+    </div>
+    <div class="footer">
+      <p>© 2024 GPSTL. Tous droits réservés.</p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statut de votre candidature</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #F44336;
+      padding: 20px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .content h2 {
+      color: #333333;
+      font-size: 20px;
+    }
+
+    .content p {
+      color: #666666;
+      line-height: 1.6;
+    }
+
+    .cta {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #F44336;
+      color: #ffffff;
+      font-weight: bolder;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+      color: inherit;
+    }
+
+    .footer {
+      text-align: center;
+      color: #999999;
+      padding: 20px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Statut de votre candidature</h1>
+    </div>
+    <div class="content">
+      <h2>Nous vous remercions pour votre candidature</h2>
+      <p>Après examen attentif de votre candidature pour l'offre <strong>${offreNom}</strong>, nous regrettons de vous informer qu'elle n'a pas été retenue.</p>
+      <p>Nous apprécions le temps que vous avez consacré à postuler et vous encourageons à explorer d'autres opportunités au sein de notre entreprise à l'avenir.</p>
+      {{comment}}
+      <a href="http://localhost:5173/" class="cta">En savoir plus</a>
+    </div>
+    <div class="footer">
+      <p>© 2024 GPSTL. Tous droits réservés.</p>
+    </div>
+  </div>
+</body>
+
+</html>

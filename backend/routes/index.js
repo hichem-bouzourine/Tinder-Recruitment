@@ -7,6 +7,7 @@ const entrepriseRoutes = require('./entrepriseRoutes');
 const candidatureRoutes = require('./candidatureRoutes');
 const competencesRoutes = require('./competencesRoutes');
 const universityRoutes = require('./universityRoutes');
+const emailRoutes = require('./emailRoutes');
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.use('/auth', authRoutes);
 router.use('/candidatures', candidatureRoutes);
 router.use("/competences", competencesRoutes)
 router.use("/universities", universityRoutes)
+router.use("/email", emailRoutes)
 
 
 module.exports = router;
