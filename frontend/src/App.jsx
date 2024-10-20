@@ -8,6 +8,9 @@ import Register from './pages/Register';
 import Submit from './pages/Submit';
 import Footer from './components/Footer'; 
 
+import Settings from './pages/Settings';
+import PostsOuverts from './pages/PostsOuverts';
+// import NotFound from './components/Not-found';
 
 function App() {
   return (
@@ -22,7 +25,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/submit" element={<Submit />} />
-
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/postsOuverts" element={<PostsOuverts />} />
             {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>
         </div>

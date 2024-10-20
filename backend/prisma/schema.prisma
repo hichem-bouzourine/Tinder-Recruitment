@@ -7,45 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  STUDENT
-  RECRUITER
-}
-
-enum Rythme {
-  FULL_TIME
-  PART_TIME
-  INTERNSHIP
-}
-
-enum Poste {
-  HR
-  CEO
-  CTO
-}
-
 model User {
   id        Int        @id @default(autoincrement())
-  email     String     @unique
   password  String
+  email     String     @unique
   role      Role
   etudiant  Etudiant?
   recruteur Recruteur?
 }
 
 model Etudiant {
-  id            Int        @id @default(autoincrement())
-  userId        Int        @unique
+  id            Int                  @id @default(autoincrement())
+  userId        Int                  @unique
   universiteId  Int?
   nom           String
   prenom        String
   dateNaissance DateTime
   anneeEtude    String?
-  universite    Universite? @relation(fields: [universiteId], references: [id])
-  user          User?       @relation(fields: [userId], references: [id])
-  favorites     Favori[]
+  cv            String?
+  linkToVideo   String?
   candidatures  Candidature[]
+  universite    Universite?          @relation(fields: [universiteId], references: [id])
+  user          User                 @relation(fields: [userId], references: [id])
   competences   EtudiantCompetence[]
+  favorites     Favori[]
 }
 
 model Recruteur {
@@ -67,7 +52,7 @@ model Entreprise {
 }
 
 model Offre {
-  id           Int       @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   nom          String
   salaire      Float
   description  String
@@ -75,7 +60,7 @@ model Offre {
   type         String
   recruteurId  Int
   favoris      Favori[]
-  recruteur    Recruteur @relation(fields: [recruteurId], references: [id])
+  recruteur    Recruteur     @relation(fields: [recruteurId], references: [id])
   candidatures Candidature[]
 }
 
@@ -96,32 +81,50 @@ model Favori {
 }
 
 model Competence {
-  id         Int                 @id @default(autoincrement())
-  nom        String
-  etudiants  EtudiantCompetence[]
+  id        Int                  @id @default(autoincrement())
+  nom       String
+  etudiants EtudiantCompetence[]
 }
 
 model EtudiantCompetence {
   etudiantId   Int
   competenceId Int
-  etudiant     Etudiant    @relation(fields: [etudiantId], references: [id])
-  competence   Competence  @relation(fields: [competenceId], references: [id])
+  competence   Competence @relation(fields: [competenceId], references: [id])
+  etudiant     Etudiant   @relation(fields: [etudiantId], references: [id])
 
   @@id([etudiantId, competenceId])
+}
+
+model Candidature {
+  id         Int             @id @default(autoincrement())
+  etudiantId Int
+  offreId    Int
+  etat       EtatCandidature
+  etudiant   Etudiant        @relation(fields: [etudiantId], references: [id])
+  offre      Offre           @relation(fields: [offreId], references: [id])
+
+  @@unique([etudiantId, offreId])
+}
+
+enum Role {
+  STUDENT
+  RECRUITER
+}
+
+enum Rythme {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+}
+
+enum Poste {
+  HR
+  CEO
+  CTO
 }
 
 enum EtatCandidature {
   PENDING
   ACCEPTED
   REJECTED
-}
-model Candidature {
-  id         Int      @id @default(autoincrement())
-  etudiantId Int
-  offreId    Int
-  etat       EtatCandidature
-  etudiant   Etudiant @relation(fields: [etudiantId], references: [id])
-  offre      Offre    @relation(fields: [offreId], references: [id])
-
-  @@unique([etudiantId, offreId]) // Un étudiant ne peut postuler qu'une seule fois à une offre donnée
 }

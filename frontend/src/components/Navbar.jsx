@@ -1,16 +1,22 @@
 // src/components/Navbar.js
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 
 function Navbar() {
-    const [user, setUser] = React.useState(localStorage.getItem('user'));
+    const [user, setUser] = React.useState(JSON.parse(localStorage.getItem('user')));
+    const navigate = useNavigate();
 
     useEffect(() => {
         const user = localStorage.getItem('user');
         if (user) {
-            setUser(user);
+            setUser(JSON.parse(user));
         }
     }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('user'); // Remove the user from localStorage
+        window.location.href = '/'; // Redirect to the front page
+    };
 
     return (
         <nav className="bg-white border-b border-blue-200">
@@ -21,13 +27,25 @@ function Navbar() {
                 </div>
                 <div className="hidden md:flex space-x-8">
                     <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
-                    <Link to="/offers" className="text-gray-600 hover:text-blue-600">Find an alternation</Link>
-                    <Link to="/community" className="text-gray-600 hover:text-blue-600">Community</Link>
+                    {user?.role != 'RECRUITER' &&
+
+                        <Link to={`${user?.role == 'STUDENT' ? '/offers' : '/login'}`} className="text-gray-600 hover:text-blue-600">Find an alternation</Link>
+                    }
+                    {user &&
+                        <Link to="/dashboard" className="text-gray-600 hover:text-blue-600">Dashboard</Link>
+                    }
                 </div>
                 {!user &&
                     <div className="flex space-x-4">
                         <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:underline">Login</Link>
                         <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Register Now</Link>
+                    </div>
+                }
+                {user &&
+                    <div className="flex space-x-4">
+                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            onClick={handleLogout}
+                        >Logout</button>
                     </div>
                 }
             </div>

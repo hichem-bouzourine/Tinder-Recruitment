@@ -7,15 +7,15 @@ function Home() {
         <div className="bg-gray-50">
             <Navbar />
             {/* Hero Section */}
-            <section className="container mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between">
-                <div className="text-center md:text-left max-w-lg">
+            <section className="container mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-around">
+                <div className="text-center md:text-left max-w-lg flex flex-col items-center">
                     <h1 className="text-4xl font-bold text-gray-900">
                         Find Your Ideal Finance <span className="text-blue-600">Internship</span> Today
                     </h1>
                     <p className="text-gray-600 mt-4">
                         Explore curated opportunities and insights from the finance industry.
                     </p>
-                    <Link to="/offers" className="mt-6 inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700">
+                    <Link to="/offers" className="mt-6 inline-block w-fit bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700">
                         Get Started
                     </Link>
                 </div>

@@ -1,5 +1,11 @@
+const { parse } = require('dotenv');
 const prisma = require('../prisma/prisma');
 const jwt = require('jsonwebtoken');
+
+const fs = require('fs');
+const path = require('path');
+
+
 
 //Obtenir tous les utilisateurs
 const getAllUsers = async (req, res) => {
@@ -146,33 +152,63 @@ const updateUser = async (req, res) => {
     }
 }
 
-// Mettre à jour les informations d'un étudiant
-const updateEtudiant = async (req, res) => {
-    const userId = req.user.id; // Récupérer l'ID de l'utilisateur connecté à partir du token JWT
-    const { nom, prenom, dateNaissance, anneeEtude, skills, universiteNom } = req.body;
-
+const getEtudiant = async (req, res) => {
+    const userId = parseInt(req.params.id);
     try {
-        // Chercher l'université par nom
-        const universite = await prisma.universite.findUnique({
-            where: { nom: universiteNom },
+        let etudiant = await prisma.etudiant.findUnique({
+            where: { userId: userId },
+            include: {
+                user: true,
+                universite: true,
+                competences: true
+            },
         });
 
-        if (!universite) {
-            return res.status(404).json({ error: 'Université non trouvée.' });
+        const competenceIDs = etudiant.competences.map((competence) => competence.competenceId);
+        const competences = await prisma.competence.findMany({
+            where: { id: { in: competenceIDs } },
+        });
+        etudiant = { ...etudiant, competences };
+
+
+        if (!etudiant) {
+            return res.status(404).json({ error: 'Étudiant non trouvé.' });
         }
 
-        // Mettre à jour les informations de l'étudiant
+        res.status(200).json(etudiant);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur lors de la récupération de l\'étudiant.' });
+    }
+}
+
+// Mettre à jour les informations d'un étudiant
+const updateEtudiant = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    const { nom, prenom, dateNaissance, anneeEtude, competences, universiteNom, linkToVideo } = req.body;
+    try {
+        console.log(req.body);
         const updatedEtudiant = await prisma.etudiant.update({
             where: { userId: userId },
             data: {
-                nom: nom || undefined,
-                prenom: prenom || undefined,
-                dateNaissance: dateNaissance ? new Date(dateNaissance) : undefined,
-                anneeEtude: anneeEtude || undefined,
-                skills: skills || undefined,
-                universite: { connect: { id: universite.id } },
+                nom: nom,
+                prenom: prenom,
+                dateNaissance: new Date(dateNaissance),
+                anneeEtude: anneeEtude,
+                linkToVideo: linkToVideo,
+                universite: { connect: { id: universiteNom.value } },
             },
         });
+        if (competences && competences.length > 0) {
+            await prisma.etudiantCompetence.deleteMany({
+                where: { etudiantId: updatedEtudiant.id }
+            });
+            await prisma.etudiantCompetence.createMany({
+                data: competences.map((competence) => ({
+                    etudiantId: updatedEtudiant.id,
+                    competenceId: competence.value
+                })),
+            });
+        }
 
         res.status(200).json(updatedEtudiant);
     } catch (error) {
@@ -180,33 +216,50 @@ const updateEtudiant = async (req, res) => {
             res.status(404).json({ error: 'Étudiant non trouvé.' });
         } else {
             res.status(500).json({ error: 'Erreur lors de la mise à jour de l\'étudiant.' });
+            console.log(error);
         }
     }
 };
 
-// Mettre à jour les informations d'un recruteur
-const updateRecruteur = async (req, res) => {
-    const userId = req.user.id; // Récupérer l'ID de l'utilisateur connecté à partir du token JWT
-    const { nom, prenom, poste, entrepriseNom } = req.body;
-
+const getRecruiter = async (req, res) => {
+    const userId = parseInt(req.params.id);
     try {
-        // Chercher l'entreprise par nom
-        const entreprise = await prisma.entreprise.findUnique({
-            where: { nom: entrepriseNom },
+        let recruiter = await prisma.recruteur.findUnique({
+            where: { userId: userId },
+            include: {
+                user: true,
+                entreprise: true,
+            },
         });
 
-        if (!entreprise) {
-            return res.status(404).json({ error: 'Entreprise non trouvée.' });
+        if (!recruiter) {
+            return res.status(404).json({ error: 'Recruteur non trouvé.' });
         }
 
+        res.status(200).json(recruiter);
+
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Erreur lors de la récupération du recruteur.' });
+    }
+}
+
+
+// Mettre à jour les informations d'un recruteur
+const updateRecruteur = async (req, res) => {
+    // const userId = req.user.id; // Récupérer l'ID de l'utilisateur connecté à partir du token JWT
+    const userId = parseInt(req.params.id);
+    const { nom, prenom, poste, entrepriseId, entrepriseNom } = req.body;
+    console.log(req.body);
+    try {
         // Mettre à jour les informations du recruteur
         const updatedRecruteur = await prisma.recruteur.update({
             where: { userId: userId },
             data: {
-                nom: nom || undefined,
-                prenom: prenom || undefined,
-                poste: poste || undefined,
-                entreprise: { connect: { id: entreprise.id } },
+                nom: nom,
+                prenom: prenom,
+                poste: poste,
+                entreprise: { connect: { id: entrepriseId } },
             },
         });
 
@@ -220,6 +273,54 @@ const updateRecruteur = async (req, res) => {
     }
 };
 
+const uploadCV = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    const userId = parseInt(req.params.id);
+    try {
+        const userUploadDir = path.join(__dirname, '../uploads', userId.toString());
+        if (!fs.existsSync(userUploadDir)) {
+            fs.mkdirSync(userUploadDir, { recursive: true });
+        }
+        const fileName = req.file.originalname;
+        const oldPath = req.file.path;
+        const newPath = path.join(userUploadDir, fileName);
+        fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+                return res.status(500).send('Error saving file.');
+            }
+        });
+        const updatedEtudiant = await prisma.etudiant.update({
+            where: { userId: userId },
+            data: {
+                cv: fileName,
+            },
+        });
+        res.status(200).json(updatedEtudiant);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la mise à jour du CV.' });
+    }
+}
+
+const getCV = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    try {
+        const etudiant = await prisma.etudiant.findUnique({
+            where: { userId: userId },
+        });
+        if (!etudiant) {
+            return res.status(404).json({ error: 'Étudiant non trouvé.' });
+        }
+        res.download(path.join(__dirname, '../uploads', userId.toString(), etudiant.cv));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération du CV.' });
+    }
+}
+
+
 
 module.exports = {
     getAllUsers,
@@ -228,5 +329,9 @@ module.exports = {
     updateUser,
     updateEtudiant,
     updateRecruteur,
+    getEtudiant,
+    getRecruiter,
+    uploadCV,
+    getCV
 };
 

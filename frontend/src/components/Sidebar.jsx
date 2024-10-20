@@ -13,8 +13,10 @@ const Sidebar = () => {
 
     return (
         <div className="h-screen w-64 bg-white shadow-md">
-            <div className="p-4 flex justify-center items-center">
-                <img src="src/assets/logo.png" alt="Logo" className="w-20" />
+            <div className="p-4 flex justify-center items-center cursor-pointer">
+                <Link to="/">
+                    <img src="src/assets/logo.png" alt="Logo" className="w-20" />
+                </Link>
             </div>
             <ul className="space-y-8 p-4">
                 <li>
@@ -23,7 +25,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/posts" className="flex items-center text-gray-800 hover:text-blue-500">
+                    <Link to="/postsOuverts" className="flex items-center text-gray-800 hover:text-blue-500">
                         <FiFileText className="mr-3" /> Posts Ouverts
                     </Link>
                 </li>
