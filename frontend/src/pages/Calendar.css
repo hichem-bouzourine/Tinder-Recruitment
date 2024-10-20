@@ -1,20 +1,67 @@
-/* src/pages/Calendar.css */
-
 body {
   font-family: Arial, sans-serif;
 }
 
-.calendar-wrapper {
-  padding: 20px;
-  margin: 2em auto;
+.calendar-container {
+  display: flex;
+  flex-direction: column;
   max-width: 1200px;
+  margin: 20px auto;
 }
 
-h1 {
-  font-size: 2.5em;
-  text-align: center;
-  margin-bottom: 1em;
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  height: 40px;
+  margin-right: 15px;
+}
+
+.calendar-title {
+  font-size: 1.8em;
   color: #2c3e50;
+}
+
+.back-dashboard-button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.back-dashboard-button:hover {
+  background-color: #2980b9;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.create-button {
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  background-color: #2ecc71;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  opacity: 0.9;
 }
 
 .appointment-form {
@@ -58,65 +105,65 @@ h1 {
   background-color: #2980b9;
 }
 
+.main-calendar {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.calendar-navigation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.calendar-navigation {
+  background: blue;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
 .calendar-table {
   display: flex;
-  gap: 15px;
   justify-content: space-between;
 }
 
 .hours-column {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  width: 80px;
 }
 
 .hour-cell {
   height: 100px;
-  width: 80px;
-  background-color: #f1f1f1;
-  border: 1px solid #bdc3c7;
+  border: 1px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1em;
-  font-weight: bold;
-  color: #34495e;
+  font-size: 0.9em;
 }
 
 .day-column {
-  flex: 1;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .heading {
-  height: 50px;
-  background-color: #2c3e50;
+  background-color: #3498db;
   color: white;
-  text-align: center;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2em;
-  font-weight: bold;
 }
 
 .appointment-entry {
   background-color: #e74c3c;
   color: white;
   padding: 10px;
-  margin: 5px 0;
-  border-radius: 5px;
+  border-radius: 4px;
   text-align: center;
-}
-
-.appointment-entry h3 {
-  margin: 0;
-  font-size: 1em;
-  font-weight: bold;
-}
-
-.appointment-entry p {
-  margin: 5px 0 0 0;
-  font-size: 0.9em;
+  margin: 2px 0;
 }
