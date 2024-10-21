@@ -26,10 +26,10 @@ const Register = () => {
     const [competences, setCompetences] = useState([]); // Array of skills
     const [selectedSkills, setSelectedSkills] = useState([]); // To store selected skills
 
-    const [univs, setUnivs] = useState([]); // Array of skills
-    const [selectedUnivs, setSelectedUnivs] = useState([]); // To store selected skills
+    const [univs, setUnivs] = useState([]); // Array of universities
+    const [selectedUnivs, setSelectedUnivs] = useState([]); // To store selected universities
 
-    // Fetch skills from the API when component is mounted
+    // Fetch skills and universities from the API when the component is mounted
     useEffect(() => {
         axios.get("http://localhost:3000/api/competences")
             .then(response => {
@@ -49,7 +49,7 @@ const Register = () => {
                     value: univ.id,
                     label: univ.nom,
                 }));
-                setUnivs(univsOptions); // Formatting the univs for react-select
+                setUnivs(univsOptions); // Formatting the universities for react-select
             })
             .catch(error => {
                 console.error("There was an error fetching the universities!", error);
@@ -66,7 +66,6 @@ const Register = () => {
     };
 
     const handleSubmit = async (e) => {
-        // Handle the submission logic here
         e.preventDefault();
         const skillsToSend = selectedSkills.map(option => ({
             id: option.value,
@@ -83,25 +82,21 @@ const Register = () => {
             role,
             nom: lastName,
             prenom: firstName,
-        }
+        };
 
         if (role === "STUDENT") {
-
             obj = {
                 ...obj,
                 universiteId: univsToSend.id,
                 dateNaissance: birthday,
                 competences: skillsToSend,
-            }
-
+            };
         } else {
-            // poste
             obj = {
                 ...obj,
                 poste: posteRecruiter?.value,
-            }
-            console.log(obj);
-
+                entreprise: entreprise,
+            };
         }
 
         await axios.post("http://localhost:3000/auth/signup", obj)
@@ -113,92 +108,106 @@ const Register = () => {
             .catch(error => {
                 console.error("An error occurred while creating the user!", error);
             });
-
     };
 
     return (
         <div className="flex h-screen">
+            {/* Left section with an image */}
             <div className="hidden md:flex md:w-1/3 justify-center items-center bg-gray-100">
                 <img src={wolfImage} alt="Wolf" className="h-full object-cover" />
             </div>
+
+            {/* Right section with the form */}
             <div className="w-full md:w-2/3 flex flex-col justify-center items-center bg-white p-6">
                 <h1 className="text-3xl font-bold text-blue-600 mb-6">Set up your account</h1>
                 <p className="text-gray-500 mb-4">Your details</p>
                 <form onSubmit={handleSubmit} className="w-full max-w-3xl">
-                    <div className="mb-4 flex flex-row justify-center items-center">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">First Name</label>
-                        <input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
-
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
+                    <div className="mb-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+                            <input
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
+                            <input
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="mb-4 flex flex-row justify-center items-center">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
-
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Email</label>
-                        <input
-                            type="email"
-                            value={confirmEmail}
-                            onChange={(e) => setConfirmEmail(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
+                    
+                    <div className="mb-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Email</label>
+                            <input
+                                type="email"
+                                value={confirmEmail}
+                                onChange={(e) => setConfirmEmail(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4 flex flex-row justify-center items-center">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
+                    <div className="mb-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
                     </div>
 
                     {/* Role */}
-                    <div className="mb-6 flex flex-row justify-start items-center">
-                        <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">Role</label>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
                         <select
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
-                            className="shadow appearance-none border rounded w-3/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         >
                             <option value="STUDENT">Student</option>
                             <option value="RECRUITER">Recruiter</option>
                         </select>
                     </div>
 
-                    {role === "STUDENT" ? (
+                    {/* Conditional fields for Student */}
+                    {role === "STUDENT" && (
                         <>
-                            <div className="mb-4 flex flex-row justify-start items-center">
+                            <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Birthday</label>
                                 <DatePicker
                                     selected={birthday}
@@ -211,7 +220,7 @@ const Register = () => {
                             </div>
 
                             <div className="mb-6">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Univsersities</label>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Universities</label>
                                 <Select
                                     isMulti={false}
                                     value={selectedUnivs}
@@ -222,7 +231,6 @@ const Register = () => {
                                 />
                             </div>
 
-                            {/* Skills Combobox */}
                             <div className="mb-6">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Select Skills</label>
                                 <Select
@@ -235,9 +243,12 @@ const Register = () => {
                                 />
                             </div>
                         </>
-                    ) : (
+                    )}
+
+                    {/* Conditional fields for Recruiter */}
+                    {role === "RECRUITER" && (
                         <>
-                            <div className="mb-4 flex flex-row justify-start items-center">
+                            <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Company</label>
                                 <input
                                     type="text"
@@ -247,8 +258,8 @@ const Register = () => {
                                     required
                                 />
                             </div>
-                            <div className="mb-4 flex flex-row justify-start items-center">
-                                <label className="block text-gray-700 text-sm font-bold mb-2 mr-3">Poste</label>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Poste</label>
                                 <Select
                                     isMulti={false}
                                     value={posteRecruiter}
@@ -258,7 +269,6 @@ const Register = () => {
                                     classNamePrefix="select"
                                 />
                             </div>
-
                         </>
                     )}
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './Offers.css'; // Import du fichier CSS pour les styles
 
 function Simple() {
   const [offers, setOffers] = useState([]);
@@ -73,6 +74,11 @@ function Simple() {
                   <p><strong>Salary:</strong> {offer.salaire} €</p>
                   <p><strong>Start Date:</strong> {new Date(offer.dateDebut).toLocaleDateString()}</p>
                   <p><strong>Description:</strong> {offer.description}</p>
+                </div>
+                {/* Swipe buttons */}
+                <div className="swipe-buttons">
+                  <button className="reject" onClick={() => swiped('left', offer)}>✖</button>
+                  <button className="accept" onClick={() => swiped('right', offer)}>✔</button>
                 </div>
               </div>
             </TinderCard>
