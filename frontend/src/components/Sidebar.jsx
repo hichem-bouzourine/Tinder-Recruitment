@@ -63,12 +63,12 @@ const Sidebar = () => {
                         {!isCollapsed && <span>Messenger</span>}
                     </Link>
                 </li>
-                <li>
+                {/* <li>
                     <Link to="/favourites" className="flex items-center text-gray-800 hover:text-blue-500">
                         <FiHeart className="mr-3" size={20} />
                         {!isCollapsed && <span>Favourites</span>}
                     </Link>
-                </li>
+                </li> */}
                 <li>
                     <Link to="/calendar" className="flex items-center text-gray-800 hover:text-blue-500">
                         <FiCalendar className="mr-3" size={20} />
@@ -83,7 +83,7 @@ const Sidebar = () => {
                 </li>
                 <li
                     onClick={handleLogout}
-                    className="flex items-center text-gray-800 hover:text-blue-500 w-full text-left"
+                    className="flex items-center text-gray-800 hover:text-blue-500 w-full text-left cursor-pointer"
                 >
                     <FiLogOut className="mr-3" size={20} />
                     {!isCollapsed && <span>Logout</span>}

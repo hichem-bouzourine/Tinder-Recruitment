@@ -70,7 +70,7 @@ const CandidaturesRecues = () => {
             <div className="w-full p-8">
                 {candidacies &&
                     <>
-                        <h1 className="text-3xl font-bold mb-8">Received Candidacies</h1>
+                        <h1 className="text-3xl font-bold text-black mb-8">Received Candidacies</h1>
                         <table className="w-full bg-white shadow-md rounded-lg">
                             <thead className="bg-blue-500 text-white">
                                 <tr>

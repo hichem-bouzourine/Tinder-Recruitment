@@ -59,4 +59,56 @@ const sendMail = async (req, res) => {
     });
 };
 
-module.exports = { sendMail };
+const sendCalendarScheduleMail = async (req, res) => {
+    try {
+        const { email, scheduleData } = req.body;
+
+        // Read the confirmSchedule.html template
+        const templatePath = path.join(__dirname, 'confirmSchedule.html');
+        let emailTemplate = fs.readFileSync(templatePath, 'utf8');
+
+        // Generate the schedule table rows
+        let scheduleRows = '';
+        scheduleData.forEach(day => {
+            day.appointments.forEach(appointment => {
+                scheduleRows += `
+                    <tr>
+                        <td>${day.name}</td>
+                        <td>${appointment.title}</td>
+                        <td>${appointment.time}</td>
+                    </tr>
+                `;
+            });
+        });
+
+        // Inject the schedule rows into the template
+        emailTemplate = emailTemplate.replace('<!-- Schedule details will be inserted dynamically -->', scheduleRows);
+
+        // Configure nodemailer with your SMTP credentials
+        let transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'hichembouzourine.uni@gmail.com',
+                pass: process.env.EMAILPASSWORD
+            }
+        });
+
+
+        // Send email
+        await transporter.sendMail({
+            from: 'your-email@gmail.com', // Sender address
+            to: email,                    // Recipient's email address
+            subject: 'Weekly Calendar Schedule',  // Email subject
+            html: emailTemplate            // HTML body
+        });
+
+        console.log('Email sent successfully!');
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+module.exports = { sendMail, sendCalendarScheduleMail };
