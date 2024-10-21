@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -52,10 +51,20 @@ function Login() {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="flex h-screen">
             <ToastContainer />
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
+            {/* Left Section with Image */}
+            <div className="hidden lg:flex w-1/2 bg-gray-100 justify-center items-center relative">
+                <img 
+                    src="src/assets/etudiant.jpg" // Remplace par l'image que tu souhaites
+                    alt="Illustration"
+                    className="w-4/4 h-4/4 object-contain" 
+                />
+            </div>
+
+            {/* Right Section with Login Form */}
+            <div className="flex flex-col justify-center w-full lg:w-1/2 p-8 lg:p-16 bg-white">
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Welcome Back!</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-gray-700">Email Address</label>
@@ -64,7 +73,7 @@ function Login() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full mt-2 p-3 border border-gray-300 rounded-lg"
+                            className="w-full mt-2 py-4 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter your email"
                             required
                         />
@@ -76,14 +85,14 @@ function Login() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full mt-2 p-3 border border-gray-300 rounded-lg"
+                            className="w-full mt-2 py-4 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter your password"
                             required
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                        className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
                     >
                         Sign In
                     </button>
