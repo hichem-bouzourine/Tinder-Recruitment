@@ -14,6 +14,7 @@ function Navbar() {
 
     const handleLogout = () => {
         localStorage.removeItem('user'); // Remove the user from localStorage
+        localStorage.removeItem('token'); // Remove the token from localStorage
         window.location.href = '/'; // Redirect to the front page
     };
 
