@@ -1,12 +1,17 @@
 const prisma = require('../prisma/prisma');
 
-//Creer une candidature 
 const createCandidature = async (req, res) => {
-  const { offreId } = req.body;
-  const userId = req.user.id;
+  console.log('Request body:', req.body);  
+  const { offreId, userId } = req.body;
+
+  console.log('userId:', userId, 'offreId:', offreId);
+
+
+  if (!offreId || !userId) {
+    return res.status(400).json({ error: 'offreId and userId are required.' });
+  }
 
   try {
-    // Vérifier si l'utilisateur connecté est un étudiant
     const etudiant = await prisma.etudiant.findUnique({
       where: { userId: userId },
     });
@@ -15,17 +20,18 @@ const createCandidature = async (req, res) => {
       return res.status(403).json({ error: 'Seuls les étudiants peuvent postuler à des offres.' });
     }
 
-    // Créer la candidature
     const candidature = await prisma.candidature.create({
       data: {
         etudiantId: etudiant.id,
         offreId: offreId,
-        etat: 'en cours',
+        etat: 'PENDING',
       },
     });
 
+    console.log(`Creating candidature for Etudiant ID: ${etudiant.id} and Offer ID: ${offreId}`);
     res.status(201).json(candidature);
   } catch (err) {
+    console.error('Error creating candidature:', err);
     res.status(500).json({ err: 'Erreur lors de la création de la candidature.' });
   }
 };

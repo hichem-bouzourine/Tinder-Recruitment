@@ -15,8 +15,9 @@ body {
   padding: 20px;
 }
 
+/* For both recruiter and student pages */
 .bg-offre-background {
-
+  background-image: url('/src/assets/bg_offre.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

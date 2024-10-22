@@ -6,11 +6,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 const cors = require('cors');
+const candidatureRoutes = require('./routes/candidatureRoutes');
 
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(express.json());
+
+app.use('/api/candidature', candidatureRoutes);
 
 
 const authenticateToken = require('./middleware/auth');

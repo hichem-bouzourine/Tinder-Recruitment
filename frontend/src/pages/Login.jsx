@@ -23,7 +23,12 @@ function Login() {
 
         axios.post('http://localhost:3000/auth/login', { email, password })
             .then((response) => {
-                localStorage.setItem('user', JSON.stringify(response.data));
+
+                const { token, user } = response.data;
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+
                 toast.success("Login successful!", {
                     position: "top-center",
                     autoClose: 3000,
