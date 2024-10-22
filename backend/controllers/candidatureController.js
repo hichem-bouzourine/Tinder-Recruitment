@@ -1,7 +1,7 @@
 const prisma = require('../prisma/prisma');
 
 const createCandidature = async (req, res) => {
-  console.log('Request body:', req.body);  
+  console.log('Request body:', req.body);
   const { offreId, userId } = req.body;
 
   console.log('userId:', userId, 'offreId:', offreId);
@@ -38,7 +38,7 @@ const createCandidature = async (req, res) => {
 
 // Récupérer les candidatures d'un étudiant
 const getCandidaturesByEtudiant = async (req, res) => {
-  const userId = req.user.id;
+  const userId = parseInt(req.params.id);
 
   try {
     const etudiant = await prisma.etudiant.findUnique({
@@ -53,6 +53,9 @@ const getCandidaturesByEtudiant = async (req, res) => {
       where: { etudiantId: etudiant.id },
       include: { offre: true },
     });
+
+    console.log(candidatures);
+
 
     res.status(200).json(candidatures);
   } catch (error) {

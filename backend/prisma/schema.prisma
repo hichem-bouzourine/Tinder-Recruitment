@@ -100,6 +100,8 @@ model Candidature {
   etudiantId Int
   offreId    Int
   etat       EtatCandidature
+  createdAt  DateTime?        @default(now())
+  updatedAt  DateTime?        @updatedAt
   etudiant   Etudiant        @relation(fields: [etudiantId], references: [id])
   offre      Offre           @relation(fields: [offreId], references: [id])
 

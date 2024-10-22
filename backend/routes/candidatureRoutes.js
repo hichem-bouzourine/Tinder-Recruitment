@@ -5,8 +5,8 @@ const authenticateToken = require('../middleware/auth');
 const router = express.Router();
 
 // Route pour créer une candidature
-router.post('/', authenticateToken, createCandidature); 
-router.get('/etudiant/:id', authenticateToken, getCandidaturesByEtudiant); 
+router.post('/', authenticateToken, createCandidature);
+router.get('/etudiant/:id', getCandidaturesByEtudiant);
 router.get('/', getAllCandidatures);
 router.get('/:id', getCandidatureById);
 router.get('/recruiter/:id', getCandidatureToRecruiter);
