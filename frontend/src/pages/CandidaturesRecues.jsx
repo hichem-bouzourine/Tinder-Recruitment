@@ -190,21 +190,7 @@ const CandidaturesRecues = () => {
                     )}
                 </div>
             }
-            {/*  {
-    id: 19,
-    etudiantId: 1,
-    offreId: 5,
-    etat: 'PENDING',
-    offre: {
-      id: 5,
-      nom: 'Dev full stack',
-      salaire: 1222,
-      description: 'Dev full stack chez SAP',
-      localisation: 'Levallois Perret',
-      type: 'Stage',
-      recruteurId: 4
-    }
-  } */}
+
             {
                 user?.role == 'STUDENT' &&
                 // fetch candidatures for student and display them
