@@ -18,6 +18,7 @@ const Sidebar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('user'); // Remove the user from localStorage
+        localStorage.removeItem('token'); // Remove the token from localStorage
         navigate('/'); // Redirect to the front page
     };
 

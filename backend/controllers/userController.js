@@ -106,19 +106,21 @@ const loginUser = async (req, res) => {
         if (!user || user.password !== password) {
             return res.status(401).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
         }
+
+        
         // Créer un token JWT
-        // const token = jwt.sign(
-        //     {
-        //         id: user.id, // Inclure l'ID de l'utilisateur dans le payload
-        //         username: user.username,
-        //         role: user.role,
-        //     },
-        //     process.env.JWT_SECRET, // Clé secrète pour signer le token
-        //     {
-        //         expiresIn: '1h', // Expirer le token après 24 heures
-        //     }
-        // );
-        res.status(200).json(user);
+        const token = jwt.sign(
+            {
+                id: user.id, // Inclure l'ID de l'utilisateur dans le payload
+                username: user.username,
+                role: user.role,
+            },
+            process.env.JWT_SECRET, // Clé secrète pour signer le token
+            {
+                expiresIn: '2h', // Expirer le token après 24 heures
+            }
+        );
+        res.status(200).json({ token, user });
     } catch (err) {
         console.log(err);
 
