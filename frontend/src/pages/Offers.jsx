@@ -56,7 +56,7 @@ function Simple() {
   return (
     <div className="bg-offre-background h-screen relative">
       <Navbar />
-      <h1 className="text-center text-6xl font-bold mt-10">Available Offers</h1>
+      <h1 className="text-center text-6xl font-bold mt-10 text-black">Available Offers</h1>
 
       <div className="cardContainer">
         {offers.length > 0 ? (
