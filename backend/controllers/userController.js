@@ -107,7 +107,7 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
         }
 
-        
+
         // Créer un token JWT
         const token = jwt.sign(
             {
@@ -171,6 +171,7 @@ const getEtudiant = async (req, res) => {
             where: { id: { in: competenceIDs } },
         });
         etudiant = { ...etudiant, competences };
+
 
 
         if (!etudiant) {
@@ -322,6 +323,53 @@ const getCV = async (req, res) => {
     }
 }
 
+const getImage = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user) {
+            return res.status(404).json({ error: 'user non trouvé.' });
+        }
+        res.download(path.join(__dirname, '../uploads', userId.toString(), user.image));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération de l\'image.' });
+    }
+}
+
+const uploadImage = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    const userId = parseInt(req.params.id);
+    try {
+        const userUploadDir = path.join(__dirname, '../uploads', userId.toString());
+        if (!fs.existsSync(userUploadDir)) {
+            fs.mkdirSync(userUploadDir, { recursive: true });
+        }
+        const fileName = req.file.originalname;
+        const oldPath = req.file.path;
+        const newPath = path.join(userUploadDir, fileName);
+        fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+                return res.status(500).send('Error saving file.');
+            }
+        });
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                image: fileName,
+            },
+        });
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la mise à jour de l\'image.' });
+    }
+}
+
 
 
 module.exports = {
@@ -334,6 +382,8 @@ module.exports = {
     getEtudiant,
     getRecruiter,
     uploadCV,
-    getCV
+    getCV,
+    getImage,
+    uploadImage
 };
 

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { uploadCV, getCV, getRecruiter, getAllUsers, updateUser, getEtudiant, updateEtudiant, updateRecruteur } = require('../controllers/userController');
+const { getImage, uploadImage, uploadCV, getCV, getRecruiter, getAllUsers, updateUser, getEtudiant, updateEtudiant, updateRecruteur } = require('../controllers/userController');
 const multer = require('multer');
 const upload = multer({ dest: '../uploads/' });
 const router = express.Router();
@@ -14,5 +14,7 @@ router.put('/recruteur/me/:id', updateRecruteur);
 router.get('/recruteur/:id', getRecruiter);
 router.post('/etudiant/upload/:id', upload.single('file'), uploadCV);
 router.get('/etudiant/cv/:id', getCV);
+router.get('/image/:id', getImage);
+router.post('/image/upload/:id', upload.single('file'), uploadImage);
 
 module.exports = router;
