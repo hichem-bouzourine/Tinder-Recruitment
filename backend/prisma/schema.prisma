@@ -14,6 +14,7 @@ model User {
   role      Role
   etudiant  Etudiant?
   recruteur Recruteur?
+  image     String?
 }
 
 model Etudiant {
@@ -100,8 +101,8 @@ model Candidature {
   etudiantId Int
   offreId    Int
   etat       EtatCandidature
-  createdAt  DateTime?        @default(now())
-  updatedAt  DateTime?        @updatedAt
+  createdAt  DateTime?       @default(now())
+  updatedAt  DateTime?       @updatedAt
   etudiant   Etudiant        @relation(fields: [etudiantId], references: [id])
   offre      Offre           @relation(fields: [offreId], references: [id])
 
