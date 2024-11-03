@@ -225,6 +225,9 @@ function RecruiterProfile() {
                                                 primary25: '#BFDBFE',
                                             },
                                         })}
+                                        menuPortalTarget={document.body}
+                                        menuPlacement="auto"
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                     />
                                 </div>
                             </div>
