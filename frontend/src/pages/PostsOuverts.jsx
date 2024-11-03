@@ -14,7 +14,7 @@ const PostsOuverts = () => {
   const [userRole, setUserRole] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
-  const [userId,setUserId] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -33,7 +33,7 @@ const PostsOuverts = () => {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
       setUserId(parsedUser.id);
-      setUserRole(parsedUser.role); 
+      setUserRole(parsedUser.role);
     } else {
       console.log("No user found");
       navigate('/');
@@ -68,9 +68,9 @@ const PostsOuverts = () => {
       console.log('Token:', token); // 打印 token
       if (!token) {
         console.error('No token found');
-       return;
-     }
-      
+        return;
+      }
+
       const currentUserId = userId;
 
       if (!token || !currentUserId) {
@@ -99,8 +99,8 @@ const PostsOuverts = () => {
         console.error('Error creating candidature:', error);
         toast.error('Error creating candidature');
         if (error.response && error.response.status === 403) {
-            console.error('Error message:', error.response.data.error); // 会打印 "Seuls les étudiants peuvent postuler à des offres."
-          }
+          console.error('Error message:', error.response.data.error); // 会打印 "Seuls les étudiants peuvent postuler à des offres."
+        }
       }
     }
   };
@@ -132,7 +132,7 @@ const PostsOuverts = () => {
                   onCardLeftScreen={() => outOfFrame(offer.nom)}
                 >
                   <div className="card shadow-lg">
-                    <div className="cardContent">
+                    <div className="cardContent overflow-y-scroll">
                       <h2>{offer.nom}</h2>
                       <p><strong>Location:</strong> {offer.localisation}</p>
                       <p><strong>Salary:</strong> {offer.salaire} €</p>
@@ -182,7 +182,7 @@ const PostsOuverts = () => {
                 <tr key={offer.id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} text-gray-600`}>
                   <td className="p-4 border-b">{offer.nom}</td>
                   <td className="p-4 border-b">{offer.type}</td>
-                  <td className="p-4 border-b truncate" title={offer.description}>{offer.description}</td>
+                  <td className="p-4 border-b text-ellipsis overflow-hidden" title={offer.description}>{offer.description}</td>
                   <td className="p-4 border-b">{offer.localisation}</td>
                   <td className="p-4 border-b">{offer.salaire}</td>
                   <td className="p-4 border-b">{offer.applications ? offer.applications : 0}</td>
