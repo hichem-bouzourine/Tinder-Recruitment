@@ -14,6 +14,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "frontend": "file:",
+    "http-server": "^14.1.1",
     "lucide-react": "^0.453.0",
     "react": "^18.3.1",
     "react-big-calendar": "^1.15.0",
