@@ -21,7 +21,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:3000/auth/login', { email, password })
+        axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password })
             .then((response) => {
 
                 const { token, user } = response.data;
@@ -60,10 +60,10 @@ function Login() {
             <ToastContainer />
             {/* Left Section with Image */}
             <div className="hidden lg:flex w-1/2 bg-gray-100 justify-center items-center relative">
-                <img 
+                <img
                     src="src/assets/etudiant.jpg" // Remplace par l'image que tu souhaites
                     alt="Illustration"
-                    className="w-4/4 h-4/4 object-contain" 
+                    className="w-4/4 h-4/4 object-contain"
                 />
             </div>
 

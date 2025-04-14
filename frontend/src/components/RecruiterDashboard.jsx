@@ -9,7 +9,7 @@ const RecruiterDashboard = ({ user }) => {
     const [showForm, setShowForm] = useState(false);
 
     React.useEffect(() => {
-        axios.get(`http://localhost:3000/api/offers/recruiter/${user.id}`)
+        axios.get(`/api/offers/recruiter/${user.id}`)
             .then(response => {
                 setOffers(response.data);
             })

@@ -16,7 +16,7 @@ function RecruiterProfile() {
     const [entrepriseList, setEntrepriseList] = useState([]);
     const [imageFile, setImageFile] = useState(null);
 
-    const avatarDownloadAPI = 'http://localhost:3000/api/users/image/';
+    const avatarDownloadAPI = `${import.meta.env.VITE_API_URL}/api/users/image/`;
 
     const posteList = [{
         value: "HR",
@@ -34,7 +34,7 @@ function RecruiterProfile() {
 
     // Fetch the user data from the API
     useEffect(() => {
-        const api = `http://localhost:3000/api/users/recruteur/${user.id}`;
+        const api = `${import.meta.env.VITE_API_URL}/api/users/recruteur/${user.id}`;
         axios.get(api)
             .then(response => {
                 setFormData({
@@ -54,7 +54,7 @@ function RecruiterProfile() {
             })
             .catch(error => console.log(error));
 
-        axios.get("http://localhost:3000/api/entreprises")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/entreprises`)
             .then(response => {
                 setEntrepriseList(response.data.map(entreprise => ({
                     value: entreprise.id,
@@ -69,7 +69,7 @@ function RecruiterProfile() {
     // Form submit handler
     const handleSubmit = (e) => {
         e.preventDefault();
-        const api = `http://localhost:3000/api/users/recruteur/me/${user.id}`;
+        const api = `${import.meta.env.VITE_API_URL}/api/users/recruteur/me/${user.id}`;
         axios.put(api, {
             nom: formData.lastName,
             prenom: formData.firstName,
@@ -93,7 +93,7 @@ function RecruiterProfile() {
 
         try {
             await axios.post(
-                `http://localhost:3000/api/users/image/upload/${user.id}`,
+                `${import.meta.env.VITE_API_URL}/api/users/image/upload/${user.id}`,
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             );

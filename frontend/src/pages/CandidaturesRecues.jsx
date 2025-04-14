@@ -16,7 +16,7 @@ const CandidaturesRecues = () => {
 
     const [candidaciesStudent, setCandidaciesStudent] = useState([]);
 
-    const fileDownloadAPI = 'http://localhost:3000/api/users/etudiant/cv/'
+    const fileDownloadAPI = `${import.meta.env.VITE_API_URL}/api/users/etudiant/cv/`
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -25,7 +25,7 @@ const CandidaturesRecues = () => {
 
         if (parsedUser.role === 'RECRUITER') {
             // Fetch candidacies for the recruiter
-            axios.get(`http://localhost:3000/api/candidatures/recruiter/${parsedUser.id}`)
+            axios.get(`${import.meta.env.VITE_API_URL}/api/candidatures/recruiter/${parsedUser.id}`)
                 .then(response => {
 
                     setCandidacies(response.data);
@@ -35,7 +35,7 @@ const CandidaturesRecues = () => {
                 });
         } else if (parsedUser.role === 'STUDENT') {
             // Fetch candidacies for the student
-            axios.get(`http://localhost:3000/api/candidatures/etudiant/${parsedUser.id}`)
+            axios.get(`${import.meta.env.VITE_API_URL}/api/candidatures/etudiant/${parsedUser.id}`)
                 .then(response => {
                     setCandidaciesStudent(response.data);
                 })
@@ -59,7 +59,7 @@ const CandidaturesRecues = () => {
     };
 
     const sendEmail = () => {
-        axios.post('http://localhost:3000/api/email/send-email', {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/email/send-email`, {
             to: selectedCandidacy.etudiant.user.email,
             subject: isAccepted ? 'Une bonne nouvelle' : 'Le statut de votre candidature',
             isAccepted, // Send response type to the backend

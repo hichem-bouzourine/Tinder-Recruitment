@@ -66,7 +66,7 @@ const Calendar = () => {
         setShowForm(false); // Cache le formulaire après soumission
 
         // Envoi de l'email avec axios
-        axios.post('http://localhost:3000/api/email/send-schedule-email', {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/email/send-schedule-email`, {
             email: user.email,
             scheduleData: updatedDays
         })

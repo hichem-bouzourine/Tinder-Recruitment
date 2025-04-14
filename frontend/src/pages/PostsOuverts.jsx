@@ -19,7 +19,7 @@ const PostsOuverts = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/offers');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/offers`);
         setOffers(response.data);
       } catch (error) {
         console.error('Error fetching offers:', error);
@@ -82,7 +82,7 @@ const PostsOuverts = () => {
         console.log("Offer ID:", offerToDelete.id);
         console.log("User ID:", currentUserId);
 
-        const response = await axios.post('http://localhost:3000/api/candidature', {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/candidature`, {
           offreId: offerToDelete.id,
           userId: currentUserId
         }, {

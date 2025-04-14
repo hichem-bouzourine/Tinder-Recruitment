@@ -8,7 +8,7 @@ function Home() {
             <Navbar />
 
             {/* Hero Section with image background */}
-            <section 
+            <section
                 className="relative bg-blue-800 text-white py-32"
                 style={{
                     backgroundImage: "url('src/assets/buildings.jpg')",  // Remplace par ton image si nécessaire
@@ -24,7 +24,7 @@ function Home() {
                     <p className="text-lg mt-4 max-w-lg mx-auto">
                         Explore curated opportunities and insights from the finance industry.
                     </p>
-                    <Link to="/offers" className="mt-6 inline-block bg-blue-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-600 transition">
+                    <Link to="/login" className="mt-6 inline-block bg-blue-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-600 transition">
                         Get Started
                     </Link>
                 </div>
@@ -40,18 +40,18 @@ function Home() {
                         Who is this platform suitable for?
                     </p>
                     <div className="mt-12 flex flex-col md:flex-row justify-center space-y-8 md:space-y-0 md:space-x-8">
-                        <FeatureCard 
-                            title="Students and Graduates" 
+                        <FeatureCard
+                            title="Students and Graduates"
                             description="Explore finance internships tailored to your career goals."
                             icon={<FaGraduationCap className="w-10 h-10 text-blue-600" />} // Adding icon
                         />
-                        <FeatureCard 
-                            title="Finance Companies" 
+                        <FeatureCard
+                            title="Finance Companies"
                             description="Find top talent for your finance teams and streamline the hiring process."
                             icon={<FaBuilding className="w-10 h-10 text-blue-600" />} // Adding icon
                         />
-                        <FeatureCard 
-                            title="Universities and Colleges" 
+                        <FeatureCard
+                            title="Universities and Colleges"
                             description="Partner with us to help your students connect with the best internship opportunities."
                             icon={<FaUniversity className="w-10 h-10 text-blue-600" />} // Adding icon
                         />

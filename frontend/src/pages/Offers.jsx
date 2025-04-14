@@ -13,7 +13,7 @@ function Simple() {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/offers');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/offers`);
         setOffers(response.data);
       } catch (error) {
         console.error('Error fetching offers:', error);

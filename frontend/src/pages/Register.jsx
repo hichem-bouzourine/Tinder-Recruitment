@@ -31,7 +31,7 @@ const Register = () => {
 
     // Fetch skills and universities from the API when the component is mounted
     useEffect(() => {
-        axios.get("http://localhost:3000/api/competences")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/competences`)
             .then(response => {
                 const skillsOptions = response.data.map(skill => ({
                     value: skill.id,
@@ -43,7 +43,7 @@ const Register = () => {
                 console.error("There was an error fetching the skills!", error);
             });
 
-        axios.get("http://localhost:3000/api/universities")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/universities`)
             .then(response => {
                 const univsOptions = response.data.map(univ => ({
                     value: univ.id,
@@ -99,7 +99,7 @@ const Register = () => {
             };
         }
 
-        await axios.post("http://localhost:3000/auth/signup", obj)
+        await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, obj)
             .then(response => {
                 console.log("User created successfully!", response);
                 // Redirect to login page
@@ -144,7 +144,7 @@ const Register = () => {
                             />
                         </div>
                     </div>
-                    
+
                     <div className="mb-4 grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>

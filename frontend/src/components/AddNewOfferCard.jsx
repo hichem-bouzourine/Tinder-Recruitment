@@ -17,7 +17,7 @@ const AddNewOfferCard = ({ user, offers, setOffers, setShowForm }) => {
 
     const handleAddOffer = () => {
         const userId = user.id;
-        axios.post('http://localhost:3000/api/offers', { ...newOffer, userId })
+        axios.post(`${import.meta.env.VITE_API_URL}/api/offers`, { ...newOffer, userId })
             .then(response => {
                 setOffers([...offers, response.data]);
                 setNewOffer({ nom: '', type: '', description: '', salaire: '', localisation: '' });

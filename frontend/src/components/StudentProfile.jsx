@@ -25,8 +25,8 @@ const StudentProfile = () => {
     const [imageFile, setImageFile] = useState(null); // File for image upload
     const [passwordError, setPasswordError] = useState("");
 
-    const fileDownloadAPI = 'http://localhost:3000/api/users/etudiant/cv/';
-    const avatarDownloadAPI = 'http://localhost:3000/api/users/image/';
+    const fileDownloadAPI = `${import.meta.env.VITE_API_URL}/api/users/etudiant/cv/`;
+    const avatarDownloadAPI = `${import.meta.env.VITE_API_URL}/api/users/image/`;
     const storedUser = JSON.parse(localStorage.getItem('user'));
 
     const getRobotAvatarUrl = (userId) => {
@@ -36,7 +36,7 @@ const StudentProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await axios.get(`http://localhost:3000/api/users/etudiant/${storedUser.id}`)
+                await axios.get(`${import.meta.env.VITE_API_URL}/api/users/etudiant/${storedUser.id}`)
                     .then((response) => {
                         setFormData({
                             firstName: response.data.prenom || "",
@@ -62,7 +62,7 @@ const StudentProfile = () => {
                     .catch((error) => {
                         console.error("Error fetching data:", error);
                     });
-                axios.get("http://localhost:3000/api/competences")
+                axios.get(`${import.meta.env.VITE_API_URL}/api/competences`)
                     .then((response) => {
                         setCompetences(response.data.map(skill => ({
                             value: skill.id,
@@ -72,7 +72,7 @@ const StudentProfile = () => {
                     .catch((error) => {
                         console.error("Error fetching data:", error);
                     });
-                axios.get("http://localhost:3000/api/universities")
+                axios.get(`${import.meta.env.VITE_API_URL}/api/universities`)
                     .then((response) => {
                         setUnivs(response.data.map(univ => ({
                             value: univ.id,
@@ -112,7 +112,7 @@ const StudentProfile = () => {
         }
 
         try {
-            await axios.put(`http://localhost:3000/api/users/etudiant/me/${storedUser.id}`, {
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/etudiant/me/${storedUser.id}`, {
                 nom: formData.lastName,
                 prenom: formData.firstName,
                 dateNaissance: formData.birthday,
@@ -136,7 +136,7 @@ const StudentProfile = () => {
 
         try {
             await axios.post(
-                `http://localhost:3000/api/users/etudiant/upload/${storedUser.id}`,
+                `${import.meta.env.VITE_API_URL}/api/users/etudiant/upload/${storedUser.id}`,
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             );
@@ -153,7 +153,7 @@ const StudentProfile = () => {
 
         try {
             await axios.post(
-                `http://localhost:3000/api/users/image/upload/${storedUser.id}`,
+                `${import.meta.env.VITE_API_URL}/api/users/image/upload/${storedUser.id}`,
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             );
